@@ -65,13 +65,23 @@ class QuizGame:
 
     
     def create_quiz(self):
+        
         while True:
             question = input("문제를 입력하세요: ").strip()
 
-            if question:
-                break
-            else:
+            if not question:
                 print("문제는 빈칸으로 입력할 수 없습니다.")
+                continue
+
+            if any(
+                quiz.question.strip().lower() == question.lower()
+                for quiz in self.quizzes
+            ):
+                print("이미 등록된 문제입니다. 다른 문제를 입력해 주세요.")
+                continue
+
+            break
+
 
         choices = []
 
