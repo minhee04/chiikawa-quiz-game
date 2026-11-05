@@ -188,6 +188,7 @@ class QuizGame:
                 print(f"{i + 1}. {choice}")
 
     
+    
     def search_quiz(self):
         if not self.quizzes:
             print("검색할 퀴즈가 없습니다.")
@@ -204,16 +205,47 @@ class QuizGame:
             if keyword in quiz.question.lower()
         ]
 
-        if found_quizzes:
-            print("\n===== 검색 결과 =====")
-
-            for quiz in found_quizzes:
-                print(f"\n번호: {quiz.quiz_id}")
-                print(f"문제: {quiz.question}")
-                for i, choice in enumerate(quiz.choices, start=1):
-                    print(f"{i}. {choice}")
-        else:
+        if not found_quizzes:
             print("검색 결과가 없습니다.")
+            return
+
+        print("\n===== 검색 결과 =====")
+
+        for quiz in found_quizzes:
+            print(f"\n번호: {quiz.quiz_id}")
+            print(f"문제: {quiz.question}")
+
+        while True:
+            try:
+                quiz_id = int(input("\n상세 정보를 확인할 퀴즈 번호를 입력하세요 (0: 취소): "))
+
+                if quiz_id == 0:
+                    print("검색을 종료합니다.")
+                    return
+
+                selected_quiz = next(
+                    (quiz for quiz in found_quizzes if quiz.quiz_id == quiz_id),
+                    None
+                )
+
+                if selected_quiz is None:
+                    print("검색 결과에 없는 번호입니다.")
+                    continue
+
+                print("\n===== 퀴즈 상세 정보 =====")
+                print(f"문제: {selected_quiz.question}")
+
+                for i, choice in enumerate(selected_quiz.choices, start=1):
+                    print(f"{i}. {choice}")
+
+                print(f"정답: {selected_quiz.answer + 1}번")
+                print(f"힌트: {selected_quiz.hint}")
+
+                return
+
+            except ValueError:
+                print("숫자로 입력해 주세요.")
+
 
     
     def delete_quiz(self):
