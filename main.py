@@ -146,7 +146,9 @@ class QuizGame:
         print("4. 퀴즈 삭제하기")
         print("5. 최고 점수 보기")
         print("6. 점수 기록 보기")
-        print("7. 종료하기")
+        print("7. 퀴즈 검색하기")
+        print("8. 종료하기")
+
 
         while True:
             choice = input("메뉴를 선택하세요: ")
@@ -164,6 +166,8 @@ class QuizGame:
             elif choice == "6":
                 self.show_score_history()
             elif choice == "7":
+                self.search_quiz()
+            elif choice == "8":
                 print("게임을 종료합니다.")
                 break
             else:
@@ -182,6 +186,34 @@ class QuizGame:
 
             for i, choice in enumerate(quiz.choices):
                 print(f"{i + 1}. {choice}")
+
+    
+    def search_quiz(self):
+        if not self.quizzes:
+            print("검색할 퀴즈가 없습니다.")
+            return
+
+        keyword = input("검색할 단어를 입력하세요: ").strip().lower()
+
+        if not keyword:
+            print("검색어를 입력해 주세요.")
+            return
+
+        found_quizzes = [
+            quiz for quiz in self.quizzes
+            if keyword in quiz.question.lower()
+        ]
+
+        if found_quizzes:
+            print("\n===== 검색 결과 =====")
+
+            for quiz in found_quizzes:
+                print(f"\n번호: {quiz.quiz_id}")
+                print(f"문제: {quiz.question}")
+                for i, choice in enumerate(quiz.choices, start=1):
+                    print(f"{i}. {choice}")
+        else:
+            print("검색 결과가 없습니다.")
 
     
     def delete_quiz(self):
