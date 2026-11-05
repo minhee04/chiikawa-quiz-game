@@ -63,14 +63,27 @@ class QuizGame:
         with open("state.json", "w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
 
+    
     def create_quiz(self):
-        question = input("문제를 입력하세요: ")
+        while True:
+            question = input("문제를 입력하세요: ").strip()
+
+            if question:
+                break
+            else:
+                print("문제는 빈칸으로 입력할 수 없습니다.")
 
         choices = []
 
         for i in range(4):
-            choice = input(f"{i + 1}번 보기: ")
-            choices.append(choice)
+            while True:
+                choice = input(f"{i + 1}번 보기: ").strip()
+
+                if choice:
+                    choices.append(choice)
+                    break
+                else:
+                    print("보기는 빈칸으로 입력할 수 없습니다.")
 
         while True:
             try:
@@ -84,7 +97,13 @@ class QuizGame:
             except ValueError:
                 print("숫자로 입력해 주세요.")
 
-        hint = input("힌트를 입력하세요: ")
+        while True:
+            hint = input("힌트를 입력하세요: ").strip()
+
+            if hint:
+                break
+            else:
+                print("힌트는 빈칸으로 입력할 수 없습니다.")
 
         next_id = max(
             (quiz.quiz_id for quiz in self.quizzes),
@@ -107,6 +126,7 @@ class QuizGame:
         self.save_quizzes()
 
         print("퀴즈가 추가되었습니다!")
+
 
     def show_menu(self):
         print("\n===== 치이카와 퀴즈 게임 =====")
