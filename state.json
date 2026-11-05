@@ -107,6 +107,42 @@
             ],
             "answer": 3,
             "hint": "어둡고 문도 없어서 위험한 존재가 나올 수 있어요"
+        },
+        {
+            "id": 10,
+            "question": "",
+            "choices": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "answer": 0,
+            "hint": ""
+        },
+        {
+            "id": 11,
+            "question": "2",
+            "choices": [
+                "2",
+                "2",
+                "2",
+                "2"
+            ],
+            "answer": 1,
+            "hint": "2"
+        },
+        {
+            "id": 12,
+            "question": "1",
+            "choices": [
+                "2",
+                "3",
+                "1",
+                "1"
+            ],
+            "answer": 1,
+            "hint": "3"
         }
     ],
     "score_history": [
@@ -167,6 +203,12 @@
         {
             "date": "2026-11-05 00:49:23",
             "total": 3,
+            "correct": 2,
+            "score": 2
+        },
+        {
+            "date": "2026-11-05 20:45:41",
+            "total": 5,
             "correct": 2,
             "score": 2
         }
