@@ -1,6 +1,8 @@
 from datetime import datetime
 import json
 import random
+import os
+import shutil
 
 class Quiz:
     def __init__(self, quiz_id, question, choices, answer, hint):
@@ -25,12 +27,31 @@ class QuizGame:
         self.quizzes.append(quiz)
 
     def load_quizzes(self):
-        with open("state.json", "r", encoding="utf-8") as file:
-            data = json.load(file)
-            self.high_score = data.get("high_score", 0)
-            self.score_history = data.get("score_history", [])
+        try:
+            with open("state.json", "r", encoding="utf-8") as file:
+                data = json.load(file)
 
-        for quiz_data in data["quizzes"]:
+        except FileNotFoundError:
+            print("저장된 데이터 파일이 없습니다. 새로 시작합니다.")
+            self.quizzes = []
+            self.score_history = []
+            self.high_score = 0
+            return
+
+        except json.JSONDecodeError:
+            print("데이터 파일이 손상되어 읽을 수 없습니다.")
+            print("state.json 파일을 확인하거나 백업 파일로 복구해 주세요.")
+            raise SystemExit
+
+        except (PermissionError, OSError) as error:
+            print(f"데이터 파일을 읽는 중 오류가 발생했습니다: {error}")
+            raise SystemExit
+
+        self.high_score = data.get("high_score", 0)
+        self.score_history = data.get("score_history", [])
+        self.quizzes = []
+
+        for quiz_data in data.get("quizzes", []):
             quiz = Quiz(
                 quiz_data["id"],
                 quiz_data["question"],
@@ -40,7 +61,6 @@ class QuizGame:
             )
 
             self.quizzes.append(quiz)
-
 
     def save_quizzes(self):
         data = {
@@ -60,9 +80,27 @@ class QuizGame:
 
             data["quizzes"].append(quiz_data)
 
-        with open("state.json", "w", encoding="utf-8") as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
+        try:
+            # 임시 파일에 먼저 저장
+            with open("state.json.tmp", "w", encoding="utf-8") as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
+                file.flush()
+                os.fsync(file.fileno())
 
+            # 기존 파일이 있으면 백업
+            if os.path.exists("state.json"):
+                shutil.copy2("state.json", "state.json.bak")
+
+            # 임시 파일을 실제 저장 파일로 교체
+            os.replace("state.json.tmp", "state.json")
+
+        except OSError as error:
+            print(f"데이터 저장 중 오류가 발생했습니다: {error}")
+
+            if os.path.exists("state.json.tmp"):
+                os.remove("state.json.tmp")
+
+            raise SystemExit
     
     def create_quiz(self):
         
