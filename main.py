@@ -465,5 +465,13 @@ class QuizGame:
 
         
 
-game = QuizGame()
-game.show_menu()
+if __name__ == "__main__":
+    try:
+        game = QuizGame()
+        game.show_menu()
+
+    except KeyboardInterrupt:
+        print("\n사용자 요청으로 프로그램을 종료합니다.")
+
+    except EOFError:
+        print("\n입력이 종료되어 프로그램을 종료합니다.")
