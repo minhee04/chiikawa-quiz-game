@@ -153,6 +153,7 @@ class QuizGame:
             for i, choice in enumerate(quiz.choices):
                 print(f"{i + 1}. {choice}")
 
+    
     def delete_quiz(self):
         if not self.quizzes:
             print("삭제할 퀴즈가 없습니다.")
@@ -170,20 +171,34 @@ class QuizGame:
 
                 for quiz in self.quizzes:
                     if quiz.quiz_id == quiz_id:
-                        self.quizzes.remove(quiz)
+                        while True:
+                            confirm = input(
+                                f"'{quiz.question}' 퀴즈를 삭제하시겠습니까? (y/n): "
+                            ).strip().lower()
 
-                        for i, quiz in enumerate(self.quizzes, start=1):
-                            quiz.quiz_id = i
+                            if confirm == "y":
+                                self.quizzes.remove(quiz)
 
-                        self.save_quizzes()
-                        print("퀴즈가 삭제되었습니다!")
-                        return
+                                for i, quiz in enumerate(self.quizzes, start=1):
+                                    quiz.quiz_id = i
+
+                                self.save_quizzes()
+                                print("퀴즈가 삭제되었습니다!")
+                                return
+
+                            elif confirm == "n":
+                                print("퀴즈 삭제가 취소되었습니다.")
+                                return
+
+                            else:
+                                print("y 또는 n으로 입력해 주세요.")
 
                 print("존재하지 않는 퀴즈 번호입니다.")
-                return
+                continue
 
             except ValueError:
                 print("숫자로 입력해 주세요.")
+
 
     def play_quiz(self):
         if not self.quizzes:
