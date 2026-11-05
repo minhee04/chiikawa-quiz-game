@@ -147,7 +147,8 @@ class QuizGame:
         print("5. 최고 점수 보기")
         print("6. 점수 기록 보기")
         print("7. 퀴즈 검색하기")
-        print("8. 종료하기")
+        print("8. 퀴즈 통계 보기")
+        print("9. 종료하기")
 
 
         while True:
@@ -168,6 +169,8 @@ class QuizGame:
             elif choice == "7":
                 self.search_quiz()
             elif choice == "8":
+                self.show_statistics()
+            elif choice == "9":
                 print("게임을 종료합니다.")
                 break
             else:
@@ -396,6 +399,32 @@ class QuizGame:
             print(f"전체 문제: {record['total']}개")
             print(f"정답: {record['correct']}개")
             print(f"점수: {record['score']}점")
+
+    
+    def show_statistics(self):
+        total_quizzes = len(self.quizzes)
+        total_games = len(self.score_history)
+
+        total_questions = sum(
+            record["total"] for record in self.score_history
+        )
+
+        total_correct = sum(
+            record["correct"] for record in self.score_history
+        )
+
+        if total_questions > 0:
+            accuracy = (total_correct / total_questions) * 100
+        else:
+            accuracy = 0
+
+        print("\n===== 퀴즈 통계 =====")
+        print(f"등록된 퀴즈 수: {total_quizzes}개")
+        print(f"전체 플레이 횟수: {total_games}회")
+        print(f"누적 출제 문제 수: {total_questions}개")
+        print(f"누적 정답 수: {total_correct}개")
+        print(f"평균 정답률: {accuracy:.1f}%")
+
         
 
 game = QuizGame()
